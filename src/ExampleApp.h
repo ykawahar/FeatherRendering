@@ -69,6 +69,9 @@ private:
 	void drawText(const std::string text, float xPos, float yPos, GLfloat windowHeight, GLfloat windowWidth);
 	struct FONScontext* fs;
 	GLSLProgram _textShader;
+    
+    void buildRachsis(float x, float y, float x2, float y2, float radius);
+
 };
 
 

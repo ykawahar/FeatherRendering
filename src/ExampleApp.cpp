@@ -225,3 +225,35 @@ void ExampleApp::initializeText() {
 	_textShader.compileShader("textRendering.frag", GLSLShader::FRAGMENT);
 	_textShader.link();
 }
+
+void ExampleApp::buildRachsis(float x, float y, float x2, float y2, float radius){
+    std::vector<Mesh::Vertex> cpuVertexArray;
+    std::vector<int>             cpuIndexArray;
+    std::vector<std::shared_ptr<Texture>> textures;
+    
+    vec3 normal(0,0,1);
+    
+    Mesh::Vertex vert;
+    vert.position = vec3(0,0,0);
+    vert.normal = normal;
+    vert.texCoord0 = glm::vec2(0, 0);
+    cpuVertexArray.push_back(vert);
+    cpuIndexArray.push_back(0);
+    
+    vert.position = vec3(1,0,0);
+    vert.normal = normal;
+    vert.texCoord0 = glm::vec2(1, 0);
+    cpuVertexArray.push_back(vert);
+    cpuIndexArray.push_back(1);
+    
+    vert.position = vec3(0,1,0);
+    vert.normal = normal;
+    vert.texCoord0 = glm::vec2(0, 1);
+    cpuVertexArray.push_back(vert);
+    cpuIndexArray.push_back(2);
+    
+    const int numVertices = (int)cpuVertexArray.size();
+    const int cpuVertexByteSize = sizeof(Mesh::Vertex) * numVertices;
+    const int cpuIndexByteSize = sizeof(int) * (int)cpuIndexArray.size();
+    _mesh.reset(new Mesh(textures, GL_TRIANGLES, GL_STATIC_DRAW, cpuVertexByteSize, cpuIndexByteSize, 0, cpuVertexArray, (int)cpuIndexArray.size(), cpuIndexByteSize, &cpuIndexArray[0]));
+}

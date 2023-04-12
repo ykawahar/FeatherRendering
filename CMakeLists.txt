@@ -1,4 +1,3 @@
-
 # !!!!!!!!!!!!! EDIT THE FOLLOWING LINE AS NEEDED TO POINT AT YOUR BASIC GRAPHICS LIBARARY INSTALL !!!!!!!!!!!!! 
 list(APPEND CMAKE_PREFIX_PATH ../basicgraphics/build/install ../minvr/build/install)
 
@@ -26,7 +25,7 @@ AutoBuild_init()
 
 #---------------------- Source for this Project ----------------------
 
-project(basicgraphics-example)
+project(FeatherRender)
 
 message(STATUS "==== BUILDING ${PROJECT_NAME}")
 message(STATUS "Using install prefix: ${CMAKE_INSTALL_PREFIX}")
