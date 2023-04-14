@@ -61,6 +61,8 @@ private:
 
 	double _lastTime;
 	double _curFrameTime;
+    
+    std::unique_ptr<basicgraphics::Mesh>_mesh;
 
 	virtual void reloadShaders();
 	GLSLProgram _shader;
@@ -71,6 +73,7 @@ private:
 	GLSLProgram _textShader;
     
     void buildRachsis(float x, float y, float x2, float y2, float radius);
+    void drawCylinder();
 
 };
 
