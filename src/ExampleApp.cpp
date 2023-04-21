@@ -126,7 +126,7 @@ void ExampleApp::onRenderGraphicsContext(const VRGraphicsState &renderState) {
                 
             float cx = 0;
             float cz = 0;
-            float r = 0.75;
+            float r = 0.1;
             int num_segments = 60;
             
             //Center point
@@ -166,7 +166,6 @@ void ExampleApp::onRenderGraphicsContext(const VRGraphicsState &renderState) {
               float theta = glm::two_pi<float>() * float(ii) / float(num_segments);//get the current angle
               float x = r * cos(theta);//calculate the x component
               float z = r * sin(theta);//calculate the y component
-              Mesh::Vertex vert;
               vert.position = vec3(x+ cx, 1, z + cz);
               vert.normal = vec3(0, 1, 0);
               vert.texCoord0 = glm::vec2(ii/num_segments, 1);
@@ -185,7 +184,6 @@ void ExampleApp::onRenderGraphicsContext(const VRGraphicsState &renderState) {
               float x = r * cos(theta); // calculate the x component
               float z = r * sin(theta); // calculate the y component
               // Add TOP
-              Mesh::Vertex vert;
               vert.position = vec3(x + cx, 1, z + cz);
               vert.normal = normalize(vec3(x, 0, z));
               vert.texCoord0 = glm::vec2(1-(ii + 1) / float(num_segments), 0);
