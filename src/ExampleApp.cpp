@@ -119,7 +119,7 @@ void ExampleApp::onRenderGraphicsContext(const VRGraphicsState &renderState) {
             std::vector<Mesh::Vertex> cpuVertexArray;
             std::vector<int> cpuIndexArray;
             std::vector<std::shared_ptr<Texture>> textures;
-            
+        
         //    std::shared_ptr<Texture> tex =
         //    Texture::create2DTextureFromFile(“campbells.jpg”);
         //    textures.push_back(tex);
@@ -257,6 +257,7 @@ void ExampleApp::onRenderGraphicsScene(const VRGraphicsState &renderState) {
 	_shader.setUniform("normal_mat", mat3(transpose(inverse(model))));
 	_shader.setUniform("eye_world", eye_world);
 
+    _mesh-> draw(_shader);
 
 //	_box->draw(_shader, model);
 
