@@ -75,7 +75,7 @@ private:
 	struct FONScontext* fs;
 	GLSLProgram _textShader;
     
-    void buildRachsis(float cx, float cz,float r);
+    void buildRachsis(float cx, float cz,float cy,float h,float r);
     void drawCylinder();
 
 };

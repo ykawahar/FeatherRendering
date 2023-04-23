@@ -121,9 +121,10 @@ void ExampleApp::onRenderGraphicsContext(const VRGraphicsState &renderState) {
         //    std::shared_ptr<Texture> tex =
         //    Texture::create2DTextureFromFile(“campbells.jpg”);
         //    textures.push_back(tex);
-        buildRachsis(0.0f,0.0f,0.1f);
-        buildRachsis(1.0f,1.0f,0.5f);
-
+        // x z y h r
+        buildRachsis(0.0f,0.0f,-1.5f,1.0f,0.1f);
+        buildRachsis(0.0f,0.0f,-0.5f,2.0f,0.2f);
+        
             
                 const int numVertices = cpuVertexArray.size();
                 const int cpuVertexByteSize = sizeof(Mesh::Vertex) * numVertices;
@@ -247,25 +248,20 @@ void ExampleApp::initializeText() {
 	_textShader.link();
 }
 
-void ExampleApp::buildRachsis(float cx,float cz, float r){
+void ExampleApp::buildRachsis(float cx,float cz, float cy,float h,float r){
 
     int num_segments = 60;
     
     //Center point
     Mesh::Vertex vert;
-    vert.position = vec3(0, 0, 0);
-    vert.normal = vec3(0, 1, 0);
-    vert.texCoord0 = glm::vec2(0, 1);
-    cpuVertexArray.push_back(vert);
-    
+
     
     //Draw the bottom circle of the can
     for (int ii = 1; ii < num_segments+2; ii += 1)  {
       float theta = glm::two_pi<float>() * float(ii) / float(num_segments);//get the current angle
       float x = r * cos(theta);//calculate the x component
       float z = r * sin(theta);//calculate the z component
-      Mesh::Vertex vert;
-      vert.position = vec3(x+ cx, 0, z + cz);
+      vert.position = vec3(x+ cx, cy, z + cz);
       vert.normal = vec3(0, -1, 0);
       vert.texCoord0 = glm::vec2(ii/num_segments, 1);
       cpuVertexArray.push_back(vert);
@@ -277,10 +273,7 @@ void ExampleApp::buildRachsis(float cx,float cz, float r){
     }
     
     int first = (int)cpuVertexArray.size();
-    vert.position = vec3(0, 1, 0);
-    vert.normal = vec3(0, 1, 0);
-    vert.texCoord0 = glm::vec2(0, 1);
-    cpuVertexArray.push_back(vert);
+
     
     
     //Draw the top circle of the can
@@ -288,7 +281,7 @@ void ExampleApp::buildRachsis(float cx,float cz, float r){
       float theta = glm::two_pi<float>() * float(ii) / float(num_segments);//get the current angle
       float x = r * cos(theta);//calculate the x component
       float z = r * sin(theta);//calculate the y component
-      vert.position = vec3(x+ cx, 1, z + cz);
+      vert.position = vec3(x+ cx, cy+h, z + cz);
       vert.normal = vec3(0, 1, 0);
       vert.texCoord0 = glm::vec2(ii/num_segments, 1);
       cpuVertexArray.push_back(vert);
@@ -306,12 +299,12 @@ void ExampleApp::buildRachsis(float cx,float cz, float r){
       float x = r * cos(theta); // calculate the x component
       float z = r * sin(theta); // calculate the z component
       // Add TOP
-      vert.position = vec3(x + cx, 1, z + cz);
+      vert.position = vec3(x + cx, cy+h, z + cz);
       vert.normal = normalize(vec3(x, 0, z));
       vert.texCoord0 = glm::vec2(1-(ii + 1) / float(num_segments), 0);
       cpuVertexArray.push_back(vert);
       //ADD BOTTOM
-      vert.position = vec3(x + cx, 0, z + cz);
+      vert.position = vec3(x + cx, cy, z + cz);
       vert.normal = normalize(vec3(x, 0, z));
       vert.texCoord0 = glm::vec2(1-(ii + 1) / float(num_segments), 1);
       cpuVertexArray.push_back(vert);
