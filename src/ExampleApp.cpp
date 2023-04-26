@@ -254,10 +254,11 @@ void ExampleApp::initializeText() {
 void ExampleApp::buildRachsis(float cx,float cz, float cy, float cx1, float cz1, float cy1, float r){
 
     int num_segments = 60;
+    vec3 direction = vec3(cx1-cx, cy1-cy, cz1-cz);
     
     //Center point
     Mesh::Vertex vert;
-
+    
     
     //Draw the bottom circle of the can
     for (int ii = 1; ii < num_segments+2; ii += 1)  {
@@ -265,7 +266,7 @@ void ExampleApp::buildRachsis(float cx,float cz, float cy, float cx1, float cz1,
       float x = r * cos(theta);//calculate the x component
       float z = r * sin(theta);//calculate the z component
       vert.position = vec3(x+ cx, cy, z + cz);
-      vert.normal = vec3(0, -1, 0);
+      vert.normal = normalize(direction);
       vert.texCoord0 = glm::vec2(ii/num_segments, 1);
       cpuVertexArray.push_back(vert);
       if (ii > 1){
@@ -285,7 +286,7 @@ void ExampleApp::buildRachsis(float cx,float cz, float cy, float cx1, float cz1,
       float x = r * cos(theta);//calculate the x component
       float z = r * sin(theta);//calculate the y component
       vert.position = vec3(x+ cx1, cy1, z + cz1);
-      vert.normal = vec3(0, 1, 0);
+      vert.normal = normalize(direction);
       vert.texCoord0 = glm::vec2(ii/num_segments, 1);
       cpuVertexArray.push_back(vert);
       if (ii > 1){
@@ -294,7 +295,6 @@ void ExampleApp::buildRachsis(float cx,float cz, float cy, float cx1, float cz1,
         cpuIndexArray.push_back(first + ii-1);
       }
     }
-    
     
     // Draw the surrounding surface of the can
     for (int ii = 0; ii < num_segments; ii++) {
