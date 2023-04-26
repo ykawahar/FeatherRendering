@@ -142,7 +142,7 @@ void ExampleApp::onRenderGraphicsContext(const VRGraphicsState &renderState) {
               float theta = glm::two_pi<float>() * float(ii) / float(num_segments);//get the current angle
               float x = r * cos(theta);//calculate the x component
               float z = r * sin(theta);//calculate the z component
-              Mesh::Vertex vert;
+//              Mesh::Vertex vert;
               vert.position = vec3(x+ cx, 0, z + cz);
               vert.normal = vec3(0, -1, 0);
               vert.texCoord0 = glm::vec2(ii/num_segments, 1);
@@ -166,7 +166,7 @@ void ExampleApp::onRenderGraphicsContext(const VRGraphicsState &renderState) {
               float theta = glm::two_pi<float>() * float(ii) / float(num_segments);//get the current angle
               float x = r * cos(theta);//calculate the x component
               float z = r * sin(theta);//calculate the y component
-              Mesh::Vertex vert;
+//              Mesh::Vertex vert;
               vert.position = vec3(x+ cx, 1, z + cz);
               vert.normal = vec3(0, 1, 0);
               vert.texCoord0 = glm::vec2(ii/num_segments, 1);
@@ -185,7 +185,7 @@ void ExampleApp::onRenderGraphicsContext(const VRGraphicsState &renderState) {
               float x = r * cos(theta); // calculate the x component
               float z = r * sin(theta); // calculate the y component
               // Add TOP
-              Mesh::Vertex vert;
+//              Mesh::Vertex vert;
               vert.position = vec3(x + cx, 1, z + cz);
               vert.normal = normalize(vec3(x, 0, z));
               vert.texCoord0 = glm::vec2(1-(ii + 1) / float(num_segments), 0);
@@ -326,6 +326,8 @@ void ExampleApp::initializeText() {
 	_textShader.compileShader("textRendering.frag", GLSLShader::FRAGMENT);
 	_textShader.link();
 }
+
+void ExampleApp::drawCylinder(float cx1, cz1, r1, )
 
 //void ExampleApp::buildRachsis(float x, float y, float x2, float y2, float radius){
 //    std::vector<Mesh::Vertex> cpuVertexArray;
