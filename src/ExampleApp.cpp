@@ -122,8 +122,11 @@ void ExampleApp::onRenderGraphicsContext(const VRGraphicsState &renderState) {
         //    Texture::create2DTextureFromFile(“campbells.jpg”);
         //    textures.push_back(tex);
         // x z y h r
-        buildRachsis(0.0f,0.0f,-1.5f,1.0f,0.1f);
-        buildRachsis(0.0f,0.0f,-0.5f,2.0f,0.2f);
+//        buildRachsis(0.0f, 0.0f, -1.5f, 0.0f, 0.0f, -0.5f, 0.1f);
+//        buildRachsis(0.0f, 0.0f, -0.5f, 0.0f,0.0, 0.5f, 0.2f);
+        
+        //buildRachsis(0.0f, 0.0f, 0.0f, -0.5f, 0.0f, 0.0, 0.1f);
+        buildRachsis(-0.5f, 0.0f, 0.0f, 0.5f,0.0f, 0.0f, 0.2f);
         
             
                 const int numVertices = cpuVertexArray.size();
@@ -248,7 +251,7 @@ void ExampleApp::initializeText() {
 	_textShader.link();
 }
 
-void ExampleApp::buildRachsis(float cx,float cz, float cy,float h,float r){
+void ExampleApp::buildRachsis(float cx,float cz, float cy, float cx1, float cz1, float cy1, float r){
 
     int num_segments = 60;
     
@@ -281,7 +284,7 @@ void ExampleApp::buildRachsis(float cx,float cz, float cy,float h,float r){
       float theta = glm::two_pi<float>() * float(ii) / float(num_segments);//get the current angle
       float x = r * cos(theta);//calculate the x component
       float z = r * sin(theta);//calculate the y component
-      vert.position = vec3(x+ cx, cy+h, z + cz);
+      vert.position = vec3(x+ cx1, cy1, z + cz1);
       vert.normal = vec3(0, 1, 0);
       vert.texCoord0 = glm::vec2(ii/num_segments, 1);
       cpuVertexArray.push_back(vert);
@@ -299,7 +302,7 @@ void ExampleApp::buildRachsis(float cx,float cz, float cy,float h,float r){
       float x = r * cos(theta); // calculate the x component
       float z = r * sin(theta); // calculate the z component
       // Add TOP
-      vert.position = vec3(x + cx, cy+h, z + cz);
+      vert.position = vec3(x + cx1, cy1, z + cz1);
       vert.normal = normalize(vec3(x, 0, z));
       vert.texCoord0 = glm::vec2(1-(ii + 1) / float(num_segments), 0);
       cpuVertexArray.push_back(vert);
@@ -319,136 +322,3 @@ void ExampleApp::buildRachsis(float cx,float cz, float cy,float h,float r){
       }
     }
 }
-//void ExampleApp::buildRachsis(float x, float y, float x2, float y2, float radius){
-//    std::vector<Mesh::Vertex> cpuVertexArray;
-//    std::vector<int>             cpuIndexArray;
-//    std::vector<std::shared_ptr<Texture>> textures;
-//
-//    vec3 normal(0,0,1);
-//
-//    Mesh::Vertex vert;
-//    vert.position = vec3(0,0,0);
-//    vert.normal = normal;
-//    vert.texCoord0 = glm::vec2(0, 0);
-//    cpuVertexArray.push_back(vert);
-//    cpuIndexArray.push_back(0);
-//
-//    vert.position = vec3(1,0,0);
-//    vert.normal = normal;
-//    vert.texCoord0 = glm::vec2(1, 0);
-//    cpuVertexArray.push_back(vert);
-//    cpuIndexArray.push_back(1);
-//
-//    vert.position = vec3(0,1,0);
-//    vert.normal = normal;
-//    vert.texCoord0 = glm::vec2(0, 1);
-//    cpuVertexArray.push_back(vert);
-//    cpuIndexArray.push_back(2);
-//
-//    const int numVertices = (int)cpuVertexArray.size();
-//    const int cpuVertexByteSize = sizeof(Mesh::Vertex) * numVertices;
-//    const int cpuIndexByteSize = sizeof(int) * (int)cpuIndexArray.size();
-//    _mesh.reset(new Mesh(textures, GL_TRIANGLES, GL_STATIC_DRAW, cpuVertexByteSize, cpuIndexByteSize, 0, cpuVertexArray, (int)cpuIndexArray.size(), cpuIndexByteSize, &cpuIndexArray[0]));
-//}
-
-//void drawCylinder(){
-//// Create the vertex and index lists
-//    std::vector<Mesh::Vertex> cpuVertexArray;
-//    std::vector<int> cpuIndexArray;
-//    std::vector<std::shared_ptr<Texture>> textures;
-//
-////    std::shared_ptr<Texture> tex =
-////    Texture::create2DTextureFromFile(“campbells.jpg”);
-////    textures.push_back(tex);
-//
-//    float cx = 0;
-//    float cz = 0;
-//    float r = 0.75;
-//    int num_segments = 60;
-//
-//    //Center point
-//    Mesh::Vertex vert;
-//    vert.position = vec3(0, 0, 0);
-//    vert.normal = vec3(0, 1, 0);
-//    vert.texCoord0 = glm::vec2(0, 1);
-//    cpuVertexArray.push_back(vert);
-//
-//
-//    //Draw the bottom circle of the can
-//    for (int ii = 1; ii < num_segments+2; ii += 1)  {
-//      float theta = glm::two_pi<float>() * float(ii) / float(num_segments);//get the current angle
-//      float x = r * cos(theta);//calculate the x component
-//      float z = r * sin(theta);//calculate the z component
-//      Mesh::Vertex vert;
-//      vert.position = vec3(x+ cx, 0, z + cz);
-//      vert.normal = vec3(0, -1, 0);
-//      vert.texCoord0 = glm::vec2(ii/num_segments, 1);
-//      cpuVertexArray.push_back(vert);
-//      if (ii > 1){
-//        cpuIndexArray.push_back(0);
-//        cpuIndexArray.push_back(ii-1);
-//        cpuIndexArray.push_back(ii);
-//      }
-//    }
-//
-//    int first = (int)cpuVertexArray.size();
-//    vert.position = vec3(0, 1, 0);
-//    vert.normal = vec3(0, 1, 0);
-//    vert.texCoord0 = glm::vec2(0, 1);
-//    cpuVertexArray.push_back(vert);
-//
-//
-//    //Draw the top circle of the can
-//    for (int ii = 1; ii < num_segments+2; ii += 1)  {
-//      float theta = glm::two_pi<float>() * float(ii) / float(num_segments);//get the current angle
-//      float x = r * cos(theta);//calculate the x component
-//      float z = r * sin(theta);//calculate the y component
-//      Mesh::Vertex vert;
-//      vert.position = vec3(x+ cx, 1, z + cz);
-//      vert.normal = vec3(0, 1, 0);
-//      vert.texCoord0 = glm::vec2(ii/num_segments, 1);
-//      cpuVertexArray.push_back(vert);
-//      if (ii > 1){
-//        cpuIndexArray.push_back(first);
-//        cpuIndexArray.push_back(first + ii);
-//        cpuIndexArray.push_back(first + ii-1);
-//      }
-//    }
-//
-//
-//    // Draw the surrounding surface of the can
-//    for (int ii = 0; ii < num_segments; ii++) {
-//      float theta = glm::two_pi<float>() * float(ii + 1) / float(num_segments); // get the current angle
-//      float x = r * cos(theta); // calculate the x component
-//      float z = r * sin(theta); // calculate the y component
-//      // Add TOP
-//      Mesh::Vertex vert;
-//      vert.position = vec3(x + cx, 1, z + cz);
-//      vert.normal = normalize(vec3(x, 0, z));
-//      vert.texCoord0 = glm::vec2(1-(ii + 1) / float(num_segments), 0);
-//      cpuVertexArray.push_back(vert);
-//      //ADD BOTTOM
-//      vert.position = vec3(x + cx, 0, z + cz);
-//      vert.normal = normalize(vec3(x, 0, z));
-//      vert.texCoord0 = glm::vec2(1-(ii + 1) / float(num_segments), 1);
-//      cpuVertexArray.push_back(vert);
-//      if (ii > 0) {
-//        int baseIndex = cpuVertexArray.size() - 4;
-//        cpuIndexArray.push_back(baseIndex+3);
-//        cpuIndexArray.push_back(baseIndex +1);
-//        cpuIndexArray.push_back(baseIndex);
-//        cpuIndexArray.push_back(baseIndex + 2);
-//        cpuIndexArray.push_back(baseIndex + +3);
-//        cpuIndexArray.push_back(baseIndex);
-//      }
-//    }
-//        const int numVertices = cpuVertexArray.size();
-//        const int cpuVertexByteSize = sizeof(Mesh::Vertex) * numVertices;
-//        const int cpuIndexByteSize = sizeof(int) * cpuIndexArray.size();
-//        _mesh.reset(new Mesh(textures, GL_TRIANGLES, GL_STATIC_DRAW,
-//            cpuVertexByteSize, cpuIndexByteSize, 0, cpuVertexArray,
-//            cpuIndexArray.size(), cpuIndexByteSize, &cpuIndexArray[0]));
-//
-//
-//
-//}
