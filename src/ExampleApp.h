@@ -63,6 +63,9 @@ private:
 	double _curFrameTime;
     
     std::unique_ptr<basicgraphics::Mesh>_mesh;
+    std::vector<Mesh::Vertex> cpuVertexArray;
+    std::vector<int> cpuIndexArray;
+    std::vector<std::shared_ptr<Texture>> textures;
 
 	virtual void reloadShaders();
 	GLSLProgram _shader;
@@ -72,7 +75,7 @@ private:
 	struct FONScontext* fs;
 	GLSLProgram _textShader;
     
-    void buildRachsis(float x, float y, float x2, float y2, float radius);
+    void buildRachsis(float cx, float cz,float cy,float h,float r);
     void drawCylinder();
 
 };
