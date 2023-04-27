@@ -30,6 +30,9 @@ using namespace MinVR;
 #endif
 
 #include <BasicGraphics.h>
+
+#include "TurntableManipulator.h"
+
 using namespace basicgraphics;
 
 class ExampleApp : public VRApp {
@@ -66,6 +69,7 @@ private:
     std::vector<Mesh::Vertex> cpuVertexArray;
     std::vector<int> cpuIndexArray;
     std::vector<std::shared_ptr<Texture>> textures;
+    std::shared_ptr<basicgraphics::TurntableManipulator> turntable;
 
 	virtual void reloadShaders();
 	GLSLProgram _shader;
