@@ -131,12 +131,12 @@ void ExampleApp::onRenderGraphicsContext(const VRGraphicsState &renderState) {
         //    textures.push_back(tex);
         // x z y h r
         buildRachsis(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.2f);
-        buildRachsis(0.0f, 0.0f, -0.5f, 0.0f,0.0, 0.5f, 0.2f);
+        //buildRachsis(0.0f, 0.0f, -0.5f, 0.0f,0.0, 0.5f, 0.2f);
         
-        buildRachsis(0.0f, 0.0f, 0.0f, -0.5f, 0.0f, 0.0, 0.1f);
-        buildRachsis(0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.2f);
-        buildRachsis(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.2f);
-        buildRachsis(0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.2f);
+        //buildRachsis(0.0f, 0.0f, 0.0f, -0.5f, 0.0f, 0.0, 0.1f);
+        //buildRachsis(0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.2f);
+        //buildRachsis(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.2f);
+        //buildRachsis(0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.2f);
 
             
                 const int numVertices = cpuVertexArray.size();
@@ -269,96 +269,109 @@ void ExampleApp::buildRachsis(float cx,float cz, float cy, float cx1, float cz1,
     int num_segments = 60;
     vec3 direction = vec3(cx1-cx, cy1-cy, cz1-cz);
     vec3 u = glm::normalize(direction);
-    vec3 w = glm::cross(u, vec3(0, 1, 1));
+    vec3 w = glm::cross(u, vec3(1, 0, 0));
     vec3 v_prep = glm::cross(u, w);
     //Center point
     Mesh::Vertex vert;
 
     //new approach maybe
-        // for (int ii = 1; ii < num_segments+2; ii += 1)  {
-        //  float theta = glm::two_pi<float>() * float(ii) / float(num_segments);//get the current angle
-        //  //float x = r * cos(theta);//calculate the x component
-        //  //float z = r * sin(theta);//calculate the z component
-        //  //vert.position = vec3(x+ cx, cy, z + cz);
-        //  vert.position = vec3(cx, cy, cz) + r * (w * cos(theta) + v_prep * sin(theta));
-        //  vert.normal = normalize(direction);
-        //  cpuVertexArray.push_back(vert);
-        //  vert.position = vec3(cx1, cy1, cz1) + r * (w * cos(theta) + v_prep * sin(theta));
-        //  vert.normal = normalize(direction);
-        //  cpuVertexArray.push_back(vert);
-        //  if (ii > 1){
-        //          cpuIndexArray.push_back(ii+3);
-        //          cpuIndexArray.push_back(ii +1);
-        //          cpuIndexArray.push_back(ii);
-        //          cpuIndexArray.push_back(ii + 2);
-        //          cpuIndexArray.push_back(ii + +3);
-        //          cpuIndexArray.push_back(ii);
-
-        //  }
-        //}
-    
-        //Draw the bottom circle of the can
-        for (int ii = 1; ii < num_segments+2; ii += 1)  {
+         for (int ii = 0; ii < num_segments; ii += 1)  {
           float theta = glm::two_pi<float>() * float(ii) / float(num_segments);//get the current angle
-          float x = r * cos(theta);//calculate the x component
-          float z = r * sin(theta);//calculate the z component
-          vert.position = vec3(x+ cx, cy, z + cz);
-          //vert.position = vec3(cx, cy, cz) + r * (w * cos(theta) + v_prep * sin(theta));
+          //float x = r * cos(theta);//calculate the x component
+          //float z = r * sin(theta);//calculate the z component
+          //vert.position = vec3(x+ cx, cy, z + cz);
+          vert.position = vec3(cx, cy, cz) + r * (w * cos(theta) + v_prep * sin(theta));
           vert.normal = normalize(direction);
-          vert.texCoord0 = glm::vec2(ii/num_segments, 1);
           cpuVertexArray.push_back(vert);
-          if (ii > 1){
-            cpuIndexArray.push_back(0);
-            cpuIndexArray.push_back(ii-1);
-            cpuIndexArray.push_back(ii);
-          }
-        }
-    
-        int first = (int)cpuVertexArray.size();
-
-    
-        
-        //Draw the top circle of the can
-        for (int ii = 1; ii < num_segments+2; ii += 1)  {
-          float theta = glm::two_pi<float>() * float(ii) / float(num_segments);//get the current angle
-          float x = r * cos(theta);//calculate the x component
-          float z = r * sin(theta);//calculate the y component
-          vert.position = vec3(x+ cx1, cy1, z + cz1);
-          //vert.position = vec3(cx1, cy1, cz1) + r * (w * cos(theta) + v_prep * sin(theta));
+          vert.position = vec3(cx1, cy1, cz1) + r * (w * cos(theta) + v_prep * sin(theta));
           vert.normal = normalize(direction);
-          vert.texCoord0 = glm::vec2(ii/num_segments, 1);
           cpuVertexArray.push_back(vert);
-          if (ii > 1){
-            cpuIndexArray.push_back(first);
-            cpuIndexArray.push_back(first + ii);
-            cpuIndexArray.push_back(first + ii-1);
-          }
-        }
-    
-        // Draw the surrounding surface of the can
-        for (int ii = 0; ii < num_segments; ii++) {
-          float theta = glm::two_pi<float>() * float(ii + 1) / float(num_segments); // get the current angle
-          float x = r * cos(theta); // calculate the x component
-          float z = r * sin(theta); // calculate the z component
-          // Add TOP
-          vert.position = vec3(x + cx1, cy1, z + cz1);
-          vert.normal = normalize(vec3(x, 0, z));
-          vert.texCoord0 = glm::vec2(1-(ii + 1) / float(num_segments), 0);
-          cpuVertexArray.push_back(vert);
-          //ADD BOTTOM
-          vert.position = vec3(x + cx, cy, z + cz);
-          vert.normal = normalize(vec3(x, 0, z));
-          vert.texCoord0 = glm::vec2(1-(ii + 1) / float(num_segments), 1);
-          cpuVertexArray.push_back(vert);
-          if (ii > 0) {
-            int baseIndex = cpuVertexArray.size() - 4;
-            cpuIndexArray.push_back(baseIndex+3);
-            cpuIndexArray.push_back(baseIndex +1);
-            cpuIndexArray.push_back(baseIndex);
-            cpuIndexArray.push_back(baseIndex + 2);
-            cpuIndexArray.push_back(baseIndex + +3);
-            cpuIndexArray.push_back(baseIndex);
-          }
-        }
+          if (ii > 0){
+              cpuIndexArray.push_back(ii);
+              cpuIndexArray.push_back(ii+3);
+              cpuIndexArray.push_back(ii+1);
+              cpuIndexArray.push_back(ii+3);
+              cpuIndexArray.push_back(ii);
+              cpuIndexArray.push_back(ii+2);
+            
 
+          }
+        }
+//
+//        //Draw the bottom circle of the can
+//        for (int ii = 1; ii < num_segments+2; ii += 1)  {
+//          float theta = glm::two_pi<float>() * float(ii) / float(num_segments);//get the current angle
+//          float x = r * cos(theta);//calculate the x component
+//          float z = r * sin(theta);//calculate the z component
+//          vert.position = vec3(x+ cx, cy, z + cz);
+//          //vert.position = vec3(cx, cy, cz) + r * (w * cos(theta) + v_prep * sin(theta));
+//          vert.normal = normalize(direction);
+//          vert.texCoord0 = glm::vec2(ii/num_segments, 1);
+//          cpuVertexArray.push_back(vert);
+//          if (ii > 1){
+//            cpuIndexArray.push_back(0);
+//            cpuIndexArray.push_back(ii-1);
+//            cpuIndexArray.push_back(ii);
+//          }
+//        }
+//
+//        int first = (int)cpuVertexArray.size();
+//
+//
+//
+//        //Draw the top circle of the can
+//        for (int ii = 1; ii < num_segments+2; ii += 1)  {
+//          float theta = glm::two_pi<float>() * float(ii) / float(num_segments);//get the current angle
+//          float x = r * cos(theta);//calculate the x component
+//          float z = r * sin(theta);//calculate the y component
+//          vert.position = vec3(x+ cx1, cy1, z + cz1);
+//          //vert.position = vec3(cx1, cy1, cz1) + r * (w * cos(theta) + v_prep * sin(theta));
+//          vert.normal = normalize(direction);
+//          vert.texCoord0 = glm::vec2(ii/num_segments, 1);
+//          cpuVertexArray.push_back(vert);
+//          if (ii > 1){
+//            cpuIndexArray.push_back(first);
+//            cpuIndexArray.push_back(first + ii);
+//            cpuIndexArray.push_back(first + ii-1);
+//          }
+//        }
+//
+//        // Draw the surrounding surface of the can
+//        for (int ii = 0; ii < num_segments; ii++) {
+//          float theta = glm::two_pi<float>() * float(ii + 1) / float(num_segments); // get the current angle
+//          float x = r * cos(theta); // calculate the x component
+//          float z = r * sin(theta); // calculate the z component
+//          // Add TOP
+//          vert.position = vec3(x + cx1, cy1, z + cz1);
+//          vert.normal = normalize(vec3(x, 0, z));
+//          vert.texCoord0 = glm::vec2(1-(ii + 1) / float(num_segments), 0);
+//          cpuVertexArray.push_back(vert);
+//          //ADD BOTTOM
+//          vert.position = vec3(x + cx, cy, z + cz);
+//          vert.normal = normalize(vec3(x, 0, z));
+//          vert.texCoord0 = glm::vec2(1-(ii + 1) / float(num_segments), 1);
+//          cpuVertexArray.push_back(vert);
+//          if (ii > 0) {
+//            int baseIndex = cpuVertexArray.size() - 4;
+//            cpuIndexArray.push_back(baseIndex+3);
+//            cpuIndexArray.push_back(baseIndex +1);
+//            cpuIndexArray.push_back(baseIndex);
+//            cpuIndexArray.push_back(baseIndex + 2);
+//            cpuIndexArray.push_back(baseIndex + +3);
+//            cpuIndexArray.push_back(baseIndex);
+//          }
+//        }
+//
+//}
+//
+//void ExampleApp::setCylinder(vec3 p1, vec3 p2){
+//    vec3 difference = p2 - p1;
+//    vec3 defaultVector = vec3(0,1,0);
+//    vec3 rotationAxis = glm::cross(defaultVector, difference);
+//
+//    float angle = (180.0f/(glm::pi<float>())) * acos((glm::dot(defaultVector, difference))/(difference.length()));
+//
+//
+//
+//}
 }
