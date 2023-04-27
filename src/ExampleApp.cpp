@@ -11,7 +11,7 @@ ExampleApp::ExampleApp(int argc, char** argv) : VRApp(argc, argv)
 {
 	_lastTime = 0.0;
 	_angle = 0;
-    turntable.reset(new TurntableManipulator());
+    turntable.reset(new TurntableManipulator(5.0,0.0,2.0));
     turntable->setCenterPosition(vec3(0, 0, 0));
 
 }
@@ -131,9 +131,9 @@ void ExampleApp::onRenderGraphicsContext(const VRGraphicsState &renderState) {
         //    textures.push_back(tex);
         // x z y h r
         buildRachsis(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.2f);
-//        buildRachsis(0.0f, 0.0f, -0.5f, 0.0f,0.0, 0.5f, 0.2f);
+        buildRachsis(0.0f, 0.0f, -0.5f, 0.0f,0.0, 0.5f, 0.2f);
         
-        //buildRachsis(0.0f, 0.0f, 0.0f, -0.5f, 0.0f, 0.0, 0.1f);
+        buildRachsis(0.0f, 0.0f, 0.0f, -0.5f, 0.0f, 0.0, 0.1f);
         buildRachsis(0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.2f);
         buildRachsis(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.2f);
         buildRachsis(0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.2f);
@@ -269,25 +269,31 @@ void ExampleApp::buildRachsis(float cx,float cz, float cy, float cx1, float cz1,
     int num_segments = 60;
     vec3 direction = vec3(cx1-cx, cy1-cy, cz1-cz);
     vec3 u = glm::normalize(direction);
-    vec3 w = glm::cross(u, vec3(0, 0, 1));
+    vec3 w = glm::cross(u, vec3(0, 1, 1));
     vec3 v_prep = glm::cross(u, w);
     //Center point
     Mesh::Vertex vert;
 
-    //New Approach maybe
-        //    for (int ii = 1; ii < num_segments+2; ii += 1)  {
+    //new approach maybe
+        // for (int ii = 1; ii < num_segments+2; ii += 1)  {
         //  float theta = glm::two_pi<float>() * float(ii) / float(num_segments);//get the current angle
         //  //float x = r * cos(theta);//calculate the x component
         //  //float z = r * sin(theta);//calculate the z component
         //  //vert.position = vec3(x+ cx, cy, z + cz);
         //  vert.position = vec3(cx, cy, cz) + r * (w * cos(theta) + v_prep * sin(theta));
         //  vert.normal = normalize(direction);
-        //  //vert.texCoord0 = glm::vec2(ii/num_segments, 1);
+        //  cpuVertexArray.push_back(vert);
+        //  vert.position = vec3(cx1, cy1, cz1) + r * (w * cos(theta) + v_prep * sin(theta));
+        //  vert.normal = normalize(direction);
         //  cpuVertexArray.push_back(vert);
         //  if (ii > 1){
-        //    cpuIndexArray.push_back(0);
-        //    cpuIndexArray.push_back(ii-1);
-        //    cpuIndexArray.push_back(ii);
+        //          cpuIndexArray.push_back(ii+3);
+        //          cpuIndexArray.push_back(ii +1);
+        //          cpuIndexArray.push_back(ii);
+        //          cpuIndexArray.push_back(ii + 2);
+        //          cpuIndexArray.push_back(ii + +3);
+        //          cpuIndexArray.push_back(ii);
+
         //  }
         //}
     
@@ -354,4 +360,5 @@ void ExampleApp::buildRachsis(float cx,float cz, float cy, float cx1, float cz1,
             cpuIndexArray.push_back(baseIndex);
           }
         }
+
 }
