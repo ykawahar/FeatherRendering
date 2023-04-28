@@ -5,13 +5,15 @@
 #define GLFONTSTASH_IMPLEMENTATION
 #include <glfontstash.h>
 
+#include <glm/gtx/string_cast.hpp>
+
 #include <config/VRDataIndex.h>
 
 ExampleApp::ExampleApp(int argc, char** argv) : VRApp(argc, argv)
 {
 	_lastTime = 0.0;
 	_angle = 0;
-    turntable.reset(new TurntableManipulator(5.0,0.0,2.0));
+    turntable.reset(new TurntableManipulator(5.0,glm::radians(90.0f),glm::radians(45.0f)));
     turntable->setCenterPosition(vec3(0, 0, 0));
 
 }
@@ -107,12 +109,12 @@ void ExampleApp::onRenderGraphicsContext(const VRGraphicsState &renderState) {
         glDepthFunc(GL_LEQUAL);
 
 		glEnable(GL_CULL_FACE);
-		glCullFace(GL_BACK);
+        glCullFace(GL_NONE);//GL_BACK);
 
 		glEnable(GL_MULTISAMPLE);
 
 		// This sets the background color that is used to clear the canvas
-		glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+		glClearColor(1.0f, 0.2f, 0.2f, 1.0f);
 
 		// This load shaders from disk, we do it once when the program starts up.
 		reloadShaders();
@@ -268,31 +270,34 @@ void ExampleApp::buildRachsis(float cx,float cz, float cy, float cx1, float cz1,
 
     int num_segments = 60;
     vec3 direction = vec3(cx1-cx, cy1-cy, cz1-cz);
-    vec3 u = glm::normalize(direction);
-    vec3 w = glm::cross(u, vec3(1, 0, 0));
-    vec3 v_prep = glm::cross(u, w);
+    vec3 u = glm::normalize(direction); //y
+    vec3 w = glm::normalize(glm::cross( vec3(1, 0, 0), u)); //z
+    vec3 v_prep = glm::normalize(glm::cross(u, w));//x
     //Center point
     Mesh::Vertex vert;
 
     //new approach maybe
          for (int ii = 0; ii < num_segments; ii += 1)  {
           float theta = glm::two_pi<float>() * float(ii) / float(num_segments);//get the current angle
+             std::cout<<glm::degrees(theta);
           //float x = r * cos(theta);//calculate the x component
           //float z = r * sin(theta);//calculate the z component
           //vert.position = vec3(x+ cx, cy, z + cz);
-          vert.position = vec3(cx, cy, cz) + r * (w * cos(theta) + v_prep * sin(theta));
-          vert.normal = normalize(direction);
+          vert.position = vec3(cx, cy, cz) + r * (v_prep * cos(theta) + w * sin(theta));
+             std::cout<<": "<<glm::to_string(vert.position)<<std::endl;
+          vert.normal = normalize(vert.position-vec3(cx,cy,cz));
           cpuVertexArray.push_back(vert);
-          vert.position = vec3(cx1, cy1, cz1) + r * (w * cos(theta) + v_prep * sin(theta));
-          vert.normal = normalize(direction);
+          vert.position = vec3(cx1, cy1, cz1) + r * (v_prep * cos(theta) + w * sin(theta));
+          vert.normal = normalize((vert.position-vec3(cx1,cy1,cz1)));
           cpuVertexArray.push_back(vert);
           if (ii > 0){
-              cpuIndexArray.push_back(ii);
-              cpuIndexArray.push_back(ii+3);
-              cpuIndexArray.push_back(ii+1);
-              cpuIndexArray.push_back(ii+3);
-              cpuIndexArray.push_back(ii);
-              cpuIndexArray.push_back(ii+2);
+              int baseIndex = cpuVertexArray.size() - 4;
+              cpuIndexArray.push_back(baseIndex+3);
+              cpuIndexArray.push_back(baseIndex);
+              cpuIndexArray.push_back(baseIndex+1);
+              cpuIndexArray.push_back(baseIndex + 2);
+              cpuIndexArray.push_back(baseIndex);
+              cpuIndexArray.push_back(baseIndex+3);
             
 
           }
