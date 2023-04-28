@@ -114,7 +114,7 @@ void ExampleApp::onRenderGraphicsContext(const VRGraphicsState &renderState) {
 		glEnable(GL_MULTISAMPLE);
 
 		// This sets the background color that is used to clear the canvas
-		glClearColor(1.0f, 0.2f, 0.2f, 1.0f);
+		glClearColor(0.2f, 1.0f, 1.0f, 1.0f);
 
 		// This load shaders from disk, we do it once when the program starts up.
 		reloadShaders();
@@ -132,12 +132,12 @@ void ExampleApp::onRenderGraphicsContext(const VRGraphicsState &renderState) {
         //    Texture::create2DTextureFromFile(“campbells.jpg”);
         //    textures.push_back(tex);
         // x z y h r
-        buildRachsis(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.2f);
-        //buildRachsis(0.0f, 0.0f, -0.5f, 0.0f,0.0, 0.5f, 0.2f);
+        buildRachsis(0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.2f);
+		buildRachsis(0.0f, 0.0f, -0.5f, 0.0f,0.0, 0.5f, 0.2f);
         
-        //buildRachsis(0.0f, 0.0f, 0.0f, -0.5f, 0.0f, 0.0, 0.1f);
+        //buildRachsis(0.0f, 0.0f, 0.0f, -0.5f, 0.0f, 0.0, 0.2f);
         //buildRachsis(0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.2f);
-        //buildRachsis(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.2f);
+        buildRachsis(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.2f);
         //buildRachsis(0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.2f);
 
             
@@ -266,23 +266,38 @@ void ExampleApp::initializeText() {
 	_textShader.link();
 }
 
-void ExampleApp::buildRachsis(float cx,float cz, float cy, float cx1, float cz1, float cy1, float r){
+void ExampleApp::buildRachsis(float cx,float cy, float cz, float cx1, float cy1, float cz1, float r){
 
     int num_segments = 60;
     vec3 direction = vec3(cx1-cx, cy1-cy, cz1-cz);
-    vec3 u = glm::normalize(direction); //y
-    vec3 w = glm::normalize(glm::cross( vec3(1, 0, 0), u)); //z
+    vec3 u = glm::normalize(direction); 
+    vec3 w = glm::normalize(glm::cross( vec3(1, 0, 0), u)); 
     vec3 v_prep = glm::normalize(glm::cross(u, w));//x
     //Center point
     Mesh::Vertex vert;
 
     //new approach maybe
-         for (int ii = 0; ii < num_segments; ii += 1)  {
+	vert.position = vert.position = vec3(cx, cy, cz);
+	vert.normal = vec3(normalize(direction));
+	cpuVertexArray.push_back(vert);
+	int topCenterIndex = cpuVertexArray.size() - 1;
+
+		for (int ii = 1; ii <= num_segments+2; ii += 1) {
+			float theta = glm::two_pi<float>() * float(ii) / float(num_segments);//get the current angle
+			vert.position = vec3(cx, cy, cz) + r * (v_prep * cos(theta) + w * sin(theta));
+			vert.normal = normalize(direction);
+			cpuVertexArray.push_back(vert);
+
+			if (ii > 1) {
+				int baseIndex = cpuVertexArray.size();
+				cpuIndexArray.push_back(topCenterIndex);
+				cpuIndexArray.push_back(baseIndex - 1);
+				cpuIndexArray.push_back(baseIndex);
+			}
+		}
+
+         for (int ii = 0; ii <= num_segments; ii += 1)  {
           float theta = glm::two_pi<float>() * float(ii) / float(num_segments);//get the current angle
-             std::cout<<glm::degrees(theta);
-          //float x = r * cos(theta);//calculate the x component
-          //float z = r * sin(theta);//calculate the z component
-          //vert.position = vec3(x+ cx, cy, z + cz);
           vert.position = vec3(cx, cy, cz) + r * (v_prep * cos(theta) + w * sin(theta));
              std::cout<<": "<<glm::to_string(vert.position)<<std::endl;
           vert.normal = normalize(vert.position-vec3(cx,cy,cz));
@@ -290,6 +305,7 @@ void ExampleApp::buildRachsis(float cx,float cz, float cy, float cx1, float cz1,
           vert.position = vec3(cx1, cy1, cz1) + r * (v_prep * cos(theta) + w * sin(theta));
           vert.normal = normalize((vert.position-vec3(cx1,cy1,cz1)));
           cpuVertexArray.push_back(vert);
+
           if (ii > 0){
               int baseIndex = cpuVertexArray.size() - 4;
               cpuIndexArray.push_back(baseIndex+3);
@@ -298,10 +314,36 @@ void ExampleApp::buildRachsis(float cx,float cz, float cy, float cx1, float cz1,
               cpuIndexArray.push_back(baseIndex + 2);
               cpuIndexArray.push_back(baseIndex);
               cpuIndexArray.push_back(baseIndex+3);
+			  // Reverse it
+			  cpuIndexArray.push_back(baseIndex + 3);
+			  cpuIndexArray.push_back(baseIndex + 1);
+			  cpuIndexArray.push_back(baseIndex);
+			  cpuIndexArray.push_back(baseIndex + 2);
+			  cpuIndexArray.push_back(baseIndex + 3);
+			  cpuIndexArray.push_back(baseIndex);
             
 
           }
         }
+
+		 vert.position = vert.position = vec3(cx1, cy1, cz1);
+		 vert.normal = vec3(normalize(direction));
+		 cpuVertexArray.push_back(vert);
+		 int bottonCenterIndex = cpuVertexArray.size()-1;
+
+		 for (int ii = 1; ii <= num_segments + 2; ii += 1) {
+			 float theta = glm::two_pi<float>() * float(ii) / float(num_segments);//get the current angle
+			 vert.position = vec3(cx1, cy1, cz1) + r * (v_prep * cos(theta) + w * sin(theta));
+			 vert.normal = normalize(direction);
+			 cpuVertexArray.push_back(vert);
+
+			 if (ii > 1) {
+				 int baseIndex = cpuVertexArray.size();
+				 cpuIndexArray.push_back(bottonCenterIndex);
+				 cpuIndexArray.push_back(baseIndex);
+				 cpuIndexArray.push_back(baseIndex-1);
+			 }
+		 }
 //
 //        //Draw the bottom circle of the can
 //        for (int ii = 1; ii < num_segments+2; ii += 1)  {
