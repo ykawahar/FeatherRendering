@@ -135,10 +135,10 @@ void ExampleApp::onRenderGraphicsContext(const VRGraphicsState &renderState) {
         buildRachsis(0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.2f);
 		buildRachsis(0.0f, 0.0f, -0.5f, 0.0f,0.0, 0.5f, 0.2f);
         
-        //buildRachsis(0.0f, 0.0f, 0.0f, -0.5f, 0.0f, 0.0, 0.2f);
-        //buildRachsis(0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.2f);
+        buildRachsis(0.0f, 0.0f, 0.0f, -0.5f, 0.0f, 0.0, 0.2f);
+        buildRachsis(0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.2f);
         buildRachsis(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.2f);
-        //buildRachsis(0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.2f);
+        buildRachsis(0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.2f);
 
             
                 const int numVertices = cpuVertexArray.size();
@@ -271,7 +271,7 @@ void ExampleApp::buildRachsis(float cx,float cy, float cz, float cx1, float cy1,
     int num_segments = 60;
     vec3 direction = vec3(cx1-cx, cy1-cy, cz1-cz);
     vec3 u = glm::normalize(direction); 
-    vec3 w = glm::normalize(glm::cross( vec3(1, 0, 0), u)); 
+    vec3 w = glm::normalize(glm::cross( vec3(123, 231, 999), u)); 
     vec3 v_prep = glm::normalize(glm::cross(u, w));//x
     //Center point
     Mesh::Vertex vert;
