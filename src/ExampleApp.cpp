@@ -133,8 +133,10 @@ void ExampleApp::onRenderGraphicsContext(const VRGraphicsState &renderState) {
         //    textures.push_back(tex);
         // x z y h r
         
-        static vec3 vertices[] = {vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 2.0f, 0.0f)};
-        
+		vec3* vertices = new vec3[3];
+		for (int i = 0; i < 3; i++) {
+			vertices[i] = vec3(0.0f, i*1.0f, 0.0f);
+		}
         
        
         int numParts = sizeof(vertices);
@@ -143,6 +145,9 @@ void ExampleApp::onRenderGraphicsContext(const VRGraphicsState &renderState) {
             buildRachsis(vertices[i+1].x, vertices[i+1].y, vertices[i+1].z, vertices[i+1].x+1.0f, vertices[i+1].y, vertices[i+1].z, 0.1f); //LeftBarb
             buildRachsis(vertices[i+1].x, vertices[i+1].y, vertices[i+1].z, vertices[i+1].x-1.0f, vertices[i+1].y, vertices[i+1].z, 0.1f); //RightBarb
         }
+
+		delete[] vertices;
+
             
         
         
