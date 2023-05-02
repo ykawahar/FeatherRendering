@@ -132,13 +132,26 @@ void ExampleApp::onRenderGraphicsContext(const VRGraphicsState &renderState) {
         //    Texture::create2DTextureFromFile(“campbells.jpg”);
         //    textures.push_back(tex);
         // x z y h r
-        buildRachsis(0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.2f);
-		buildRachsis(0.0f, 0.0f, -0.5f, 0.0f,0.0, 0.5f, 0.2f);
         
-        buildRachsis(0.0f, 0.0f, 0.0f, -0.5f, 0.0f, 0.0, 0.2f);
-        buildRachsis(0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.2f);
-        buildRachsis(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.2f);
-        buildRachsis(0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.2f);
+        static vec3 vertices[] = {vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 2.0f, 0.0f)};
+        
+        
+       
+        int numParts = sizeof(vertices);
+        for (int i=0; i < numParts-1; i++){
+            buildRachsis(vertices[i].x, vertices[i].y, vertices[i].z, vertices[i+1].x, vertices[i+1].y, vertices[i+1].z, 0.2f); //Rachis Segment
+            buildRachsis(vertices[i+1].x, vertices[i+1].y, vertices[i+1].z, vertices[i+1].x+1.0f, vertices[i+1].y, vertices[i+1].z, 0.1f); //LeftBarb
+            buildRachsis(vertices[i+1].x, vertices[i+1].y, vertices[i+1].z, vertices[i+1].x-1.0f, vertices[i+1].y, vertices[i+1].z, 0.1f); //RightBarb
+        }
+            
+        
+        
+//		buildRachsis(0.0f, 0.0f, -0.5f, 0.0f,0.0, 0.5f, 0.2f);
+//
+//        buildRachsis(0.0f, 0.0f, 0.0f, -0.5f, 0.0f, 0.0, 0.2f);
+//        buildRachsis(0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.2f);
+//        buildRachsis(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.2f);
+//        buildRachsis(0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.2f);
 
             
                 const int numVertices = cpuVertexArray.size();
