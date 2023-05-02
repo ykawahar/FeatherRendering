@@ -132,18 +132,18 @@ void ExampleApp::onRenderGraphicsContext(const VRGraphicsState &renderState) {
         //    Texture::create2DTextureFromFile(“campbells.jpg”);
         //    textures.push_back(tex);
         // x z y h r
-        
-		vec3* vertices = new vec3[3];
-		for (int i = 0; i < 3; i++) {
-			vertices[i] = vec3(0.0f, i*1.0f, 0.0f);
+		int size = 20;
+		vec3* vertices = new vec3[size];
+		for (int i = 0; i < size; i++) {
+			vertices[i] = vec3(0.0f, i*0.2f, 0.0f);
 		}
         
        
         int numParts = sizeof(vertices);
         for (int i=0; i < numParts-1; i++){
             buildRachsis(vertices[i].x, vertices[i].y, vertices[i].z, vertices[i+1].x, vertices[i+1].y, vertices[i+1].z, 0.2f); //Rachis Segment
-            buildRachsis(vertices[i+1].x, vertices[i+1].y, vertices[i+1].z, vertices[i+1].x+1.0f, vertices[i+1].y, vertices[i+1].z, 0.1f); //LeftBarb
-            buildRachsis(vertices[i+1].x, vertices[i+1].y, vertices[i+1].z, vertices[i+1].x-1.0f, vertices[i+1].y, vertices[i+1].z, 0.1f); //RightBarb
+            buildRachsis(vertices[i+1].x, vertices[i+1].y, vertices[i+1].z, vertices[i+1].x+1.0f, vertices[i+1].y, vertices[i+1].z, 0.05f); //LeftBarb
+            buildRachsis(vertices[i+1].x, vertices[i+1].y, vertices[i+1].z, vertices[i+1].x-1.0f, vertices[i+1].y, vertices[i+1].z, 0.05f); //RightBarb
         }
 
 		delete[] vertices;
