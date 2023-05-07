@@ -41,6 +41,7 @@ set(source_files
 set(header_files
   src/ExampleApp.h
   src/TurntableManipulator.h
+  src/CatmullRomSpline.h
 )
 
 set(extra_files
