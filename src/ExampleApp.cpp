@@ -133,17 +133,20 @@ void ExampleApp::onRenderGraphicsContext(const VRGraphicsState &renderState) {
         //    textures.push_back(tex);
         // x z y h r
 		int size = 20;
+		float feather_length = 0.5f;
+		float angle = 45.0f;
+		float feather_density = 0.07f;
+		float feather_radius = 0.05f;
 		vec3* vertices = new vec3[size];
 		for (int i = 0; i < size; i++) {
-			vertices[i] = vec3(0.0f, i*0.2f, 0.0f);
+			vertices[i] = vec3(0.0f, i*feather_density, 0.0f);
 		}
-        
+		std::cout << angle * sin(angle);
        
-        int numParts = sizeof(vertices);
-        for (int i=0; i < numParts-1; i++){
-            buildRachsis(vertices[i].x, vertices[i].y, vertices[i].z, vertices[i+1].x, vertices[i+1].y, vertices[i+1].z, 0.2f); //Rachis Segment
-            buildRachsis(vertices[i+1].x, vertices[i+1].y, vertices[i+1].z, vertices[i+1].x+1.0f, vertices[i+1].y, vertices[i+1].z, 0.05f); //LeftBarb
-            buildRachsis(vertices[i+1].x, vertices[i+1].y, vertices[i+1].z, vertices[i+1].x-1.0f, vertices[i+1].y, vertices[i+1].z, 0.05f); //RightBarb
+        for (int i=0; i < size-1; i++){
+            buildRachsis(vertices[i].x, vertices[i].y, vertices[i].z, vertices[i+1].x, vertices[i+1].y, vertices[i+1].z, 0.1f); //Rachis Segment
+            buildRachsis(vertices[i+1].x, vertices[i+1].y, vertices[i+1].z, vertices[i+1].x+feather_length*sin(angle), vertices[i + 1].y+feather_length*cos(angle), vertices[i + 1].z, feather_radius); //LeftBarb
+            buildRachsis(vertices[i+1].x, vertices[i+1].y, vertices[i+1].z, vertices[i+1].x-feather_length*sin(angle), vertices[i+1].y+feather_length*cos(angle), vertices[i + 1].z, feather_radius); //RightBarb
         }
 
 		delete[] vertices;
