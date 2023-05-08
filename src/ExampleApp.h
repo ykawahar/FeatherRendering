@@ -33,6 +33,8 @@ using namespace MinVR;
 
 #include "TurntableManipulator.h"
 
+#include "CatmullRomSpline.h"
+
 using namespace basicgraphics;
 
 class ExampleApp : public VRApp {
@@ -81,7 +83,7 @@ private:
     
     void buildRachsis(float cx, float cz,float cy, float cx1, float cz1, float cy1 ,float r);
     void drawCylinder();
-
+    //CatmullRomSpline<glm::vec3> drawSpline;
 };
 
 

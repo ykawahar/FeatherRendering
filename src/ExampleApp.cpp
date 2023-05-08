@@ -7,7 +7,11 @@
 
 #include <glm/gtx/string_cast.hpp>
 
+#include <glm/glm.hpp>
+
 #include <config/VRDataIndex.h>
+
+using namespace glm;
 
 ExampleApp::ExampleApp(int argc, char** argv) : VRApp(argc, argv)
 {
@@ -135,21 +139,50 @@ void ExampleApp::onRenderGraphicsContext(const VRGraphicsState &renderState) {
 		int size = 20;
 		float feather_length = 0.5f;
 		float angle = 45.0f;
-		float feather_density = 0.07f;
+		float feather_density = 0.05f;
 		float feather_radius = 0.05f;
+		double time = 0.0;
+		int numSamples = 10;
 		vec3* vertices = new vec3[size];
 		for (int i = 0; i < size; i++) {
 			vertices[i] = vec3(0.0f, i*feather_density, 0.0f);
 		}
-		std::cout << angle * sin(angle);
-       
+		
+		//for (int i = 0; i < size; i++) {
+		//	// Make sure we don't double up
+		//	if (i > 0) {
+		//		time += glm::sqrt(glm::length(original[i] - original[i - 1]));
+		//	}
+		//	drawSpline.append(time, original[i]);
+		//}
+
+		//std::vector<vec3> vertices;
+		//vertices.push_back(vec3(0.0f, 0.0f, 0.0f));
+		//double interval = drawSpline.totalTime() / (double)(numSamples - 1);
+		//// Beginning and end might be snap points, so keep them the same to avoid floating point errors making them not match up any more
+		//for (int i = 1; i < numSamples - 1; i++) {
+		//	glm::dvec3 pt = drawSpline.evaluate(i * interval);
+		//	vertices.push_back(pt);
+		//}
+
         for (int i=0; i < size-1; i++){
-            buildRachsis(vertices[i].x, vertices[i].y, vertices[i].z, vertices[i+1].x, vertices[i+1].y, vertices[i+1].z, 0.1f); //Rachis Segment
+			buildRachsis(vertices[i].x, vertices[i].y, vertices[i].z, vertices[i+1].x, vertices[i+1].y, vertices[i+1].z, 0.1f); //Rachis Segment
+			vec3 direction = vec3(vertices[i + 1].x - vertices[i].x, vertices[i + 1].y - vertices[i].y, vertices[i + 1].z - vertices[i].z);
+			//vec3 u = glm::normalize(direction);
+			//vec3 w = glm::normalize(glm::cross(vec3(123, 231, 999), u));
+			//vec3 leftBarb = vertices[i + 1] - feather_length/2 * (w+u);
+			//vec3 rightBarb = vertices[i + 1] + feather_length/2 * (w+u);
+
+			//vec3 rightBarb = vertices[i + 1] - feather_radius * (w);
+
             buildRachsis(vertices[i+1].x, vertices[i+1].y, vertices[i+1].z, vertices[i+1].x+feather_length*sin(angle), vertices[i + 1].y+feather_length*cos(angle), vertices[i + 1].z, feather_radius); //LeftBarb
             buildRachsis(vertices[i+1].x, vertices[i+1].y, vertices[i+1].z, vertices[i+1].x-feather_length*sin(angle), vertices[i+1].y+feather_length*cos(angle), vertices[i + 1].z, feather_radius); //RightBarb
+			//buildRachsis(vertices[i + 1].x, vertices[i + 1].y, vertices[i + 1].z, leftBarb.x, leftBarb.y ,leftBarb.z, feather_radius);
+			//buildRachsis(vertices[i + 1].x, vertices[i + 1].y, vertices[i + 1].z, rightBarb.x, rightBarb.y, rightBarb.z, feather_radius);
+
         }
 
-		delete[] vertices;
+		//delete[] vertices;
 
             
         
